@@ -37,6 +37,10 @@ public class App {
         // Cleanup
         File targetFile = new File(targetImagePath);
         targetFile.delete();
+        File targetDirectoryPath = new File(projectDirectory + "images/target/");
+        if(!targetDirectoryPath.exists()) {
+            targetDirectoryPath.mkdir();
+        }        
 
         if (conversionMode == CONVERSION_MODE.IM4JAVA) {
             ConvertCmd convertCmd = new ConvertCmd();         
