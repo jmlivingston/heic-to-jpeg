@@ -23,11 +23,12 @@ public class App {
         long startTime = System.currentTimeMillis();
         File baseDirectory = new File(".");
         String projectDirectory = baseDirectory.getAbsolutePath().replace(".", "");
-        String fileName = "20MB";
-        String type = "jpg";
-        String sourceImagePath = projectDirectory + "images/source/" + fileName + ".heic";
-        // String targetImagePath = projectDirectory + "images/target/" + fileName + ".jpg";
-        String sourceFileBase64Encoded = ImageUtility.convertFileToBase64String(new File(sourceImagePath), type);
+        String fileName = "SmallWidth";
+        String startType = "heic";
+        String endType = "jpg";
+        String sourceImagePath = projectDirectory + "images/source/" + fileName + "." + startType;
+        // String targetImagePath = projectDirectory + "images/target/" + fileName + "." + endType;
+        String sourceFileBase64Encoded = ImageUtility.convertFileToBase64String(new File(sourceImagePath), endType);
         int width = 1024;
 
         // Uncomment to test out other functions
@@ -38,15 +39,16 @@ public class App {
         // if (!targetDirectoryPath.exists()) {
         //     targetDirectoryPath.mkdir();
         // }
-        // Im4JavaHelper.heicToJpegFileByFilePath(sourceImagePath, targetImagePath,
-        // width);
-        // Im4JavaHelper.heicToJpegFileByEncodedString(sourceFileBase64Encoded,
-        // targetImagePath, width);
+        // Im4JavaHelper.convertImageFileToImageFile(sourceImagePath, targetImagePath, width);
+        // Im4JavaHelper.convertImageFileToEncodedString(sourceFileBase64Encoded, targetImagePath, type, width);
+        
 
-        String jpegEncodedString = Im4JavaHelper.heicToJpegStringByEncodedString(sourceFileBase64Encoded, type, width);
-        PrintWriter out = new PrintWriter("datauri.txt");
-        out.print(jpegEncodedString);
-        out.close();
+        String jpegEncodedString = Im4JavaHelper.convertImageEncodedStringToEncodedString(sourceFileBase64Encoded, endType, width);
+
+        // Save file for testing
+        PrintWriter printerWriter = new PrintWriter("datauri.txt");
+        printerWriter.print(jpegEncodedString);
+        printerWriter.close();
 
         // Show time elapses
         long endTime = System.currentTimeMillis();
