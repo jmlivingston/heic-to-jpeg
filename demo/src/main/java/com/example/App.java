@@ -23,13 +23,20 @@ public class App {
         long startTime = System.currentTimeMillis();
         File baseDirectory = new File(".");
         String projectDirectory = baseDirectory.getAbsolutePath().replace(".", "");
-        String fileName = "SmallWidth";
+        String fileName = "20MB";
         String startType = "heic";
         String endType = "jpg";
         String sourceImagePath = projectDirectory + "images/source/" + fileName + "." + startType;
         // String targetImagePath = projectDirectory + "images/target/" + fileName + "." + endType;
         String sourceFileBase64Encoded = ImageUtility.convertFileToBase64String(new File(sourceImagePath), endType);
         int width = 1024;
+
+        String jpegEncodedString = Im4JavaHelper.convertImageEncodedStringToEncodedString(sourceFileBase64Encoded, endType, width);
+
+        // Save file for testing
+        PrintWriter printerWriter = new PrintWriter("datauri.txt");
+        printerWriter.print(jpegEncodedString);
+        printerWriter.close();        
 
         // Uncomment to test out other functions
         // Cleanup target folder
@@ -42,14 +49,6 @@ public class App {
         // Im4JavaHelper.convertImageFileToImageFile(sourceImagePath, targetImagePath, width);
         // Im4JavaHelper.convertImageFileToEncodedString(sourceFileBase64Encoded, targetImagePath, type, width);
         
-
-        String jpegEncodedString = Im4JavaHelper.convertImageEncodedStringToEncodedString(sourceFileBase64Encoded, endType, width);
-
-        // Save file for testing
-        PrintWriter printerWriter = new PrintWriter("datauri.txt");
-        printerWriter.print(jpegEncodedString);
-        printerWriter.close();
-
         // Show time elapses
         long endTime = System.currentTimeMillis();
         double timeElapsed = (endTime - startTime) / 1000.0;
