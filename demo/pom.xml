@@ -20,6 +20,16 @@
 
   <dependencies>
     <dependency>
+      <groupId>org.eclipse.ecf</groupId>
+      <artifactId>org.apache.commons.codec</artifactId>
+      <version>1.9.0.v20170208-1614</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.xml.bind</groupId>
+      <artifactId>jaxb-api</artifactId>
+      <version>2.3.1</version>
+    </dependency>
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.11</version>
@@ -32,9 +42,14 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-        <groupId>org.im4java</groupId>
-        <artifactId>im4java</artifactId>
-        <version>1.4.0</version>
+      <groupId>org.im4java</groupId>
+      <artifactId>im4java</artifactId>
+      <version>1.4.0</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>2.1</version>
     </dependency>
   </dependencies>
 

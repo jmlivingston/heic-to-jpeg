@@ -2,17 +2,13 @@ package com.example;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 
-import org.im4java.core.ConvertCmd;
 import org.im4java.core.IM4JavaException;
-import org.im4java.core.IMOperation;
-import org.im4java.core.Info;
 
-import magick.ImageInfo;
 import magick.MagickException;
-import magick.MagickImage;
 
-// This function simply takes one HEIC file and converts it into a JPEG.
+// These functions convert HEIC (base64 strings or files) into JPEG (base64 strings or files).
 
 // Note: Requires ImageMagick or GraphicsMagick (a fork) to be installed locally or binary added to library
 // https://imagemagick.org/script/download.php
@@ -23,50 +19,40 @@ import magick.MagickImage;
 // - jmagick - https://github.com/techblue/jmagick - Not working due to this error: https://bit.ly/3gFWs4N
 
 public class App {
-    public enum CONVERSION_MODE { JMAGICK, IM4JAVA}
-    public static void main(String[] args) throws InterruptedException, IOException, MagickException, IM4JavaException {
+    public static void main(String[] args) throws IOException, IM4JavaException, InterruptedException, MagickException {
         long startTime = System.currentTimeMillis();
-        CONVERSION_MODE conversionMode = CONVERSION_MODE.IM4JAVA;
         File baseDirectory = new File(".");
         String projectDirectory = baseDirectory.getAbsolutePath().replace(".", "");
         String fileName = "20MB";
+        String type = "jpg";
         String sourceImagePath = projectDirectory + "images/source/" + fileName + ".heic";
-        String targetImagePath = projectDirectory + "images/target/" + fileName + ".jpg";
-        int targetWidth = 1024; // Resizing before converting improves performance, so we can tweak accordingly.
+        // String targetImagePath = projectDirectory + "images/target/" + fileName + ".jpg";
+        String sourceFileBase64Encoded = ImageUtility.convertFileToBase64String(new File(sourceImagePath), type);
+        int width = 1024;
 
-        // Cleanup
-        File targetFile = new File(targetImagePath);
-        targetFile.delete();
-        File targetDirectoryPath = new File(projectDirectory + "images/target/");
-        if(!targetDirectoryPath.exists()) {
-            targetDirectoryPath.mkdir();
-        }        
+        // Uncomment to test out other functions
+        // Cleanup target folder
+        // File targetFile = new File(targetImagePath);
+        // targetFile.delete();
+        // File targetDirectoryPath = new File(projectDirectory + "images/target/");
+        // if (!targetDirectoryPath.exists()) {
+        //     targetDirectoryPath.mkdir();
+        // }
+        // Im4JavaHelper.heicToJpegFileByFilePath(sourceImagePath, targetImagePath,
+        // width);
+        // Im4JavaHelper.heicToJpegFileByEncodedString(sourceFileBase64Encoded,
+        // targetImagePath, width);
 
-        if (conversionMode == CONVERSION_MODE.IM4JAVA) {
-            ConvertCmd convertCmd = new ConvertCmd();         
-            // Add this if we include library in project
-            // cmd.setSearchPath(IMAGE_MAGICK_PATH);
-            Info info = new Info(sourceImagePath, true);
-            int width = info.getImageWidth();
-            IMOperation imOperation = new IMOperation();
-            imOperation.addImage(sourceImagePath);
-            if(width > targetWidth) {
-                imOperation.resize(targetWidth);
-            }
-            imOperation.addImage(targetImagePath);
-            convertCmd.run(imOperation);  
-        } else {
-            ImageInfo imageInfo = new ImageInfo(sourceImagePath);
-            MagickImage magickImage = new MagickImage(imageInfo);
-            magickImage.setFileName(targetImagePath);
-            magickImage.writeImage(imageInfo);
-        }
+        String jpegEncodedString = Im4JavaHelper.heicToJpegStringByEncodedString(sourceFileBase64Encoded, type, width);
+        PrintWriter out = new PrintWriter("datauri.txt");
+        out.print(jpegEncodedString);
+        out.close();
 
         // Show time elapses
         long endTime = System.currentTimeMillis();
         double timeElapsed = (endTime - startTime) / 1000.0;
-        System.out.println("--------------------------------------------");       
-        System.out.println("Conversion took " + timeElapsed + " seconds."); 
-        System.out.println("--------------------------------------------");       
+        System.out.println("--------------------------------------------");
+        System.out.println("Conversion took " + timeElapsed + " seconds.");
+        System.out.println("--------------------------------------------");
     }
 }
